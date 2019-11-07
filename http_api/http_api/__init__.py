@@ -14,14 +14,19 @@ def randomize():
     return jsonify({"token": token})
 
 
-@application.route("/randomize/<token>/result", methods=["GET"])
-def randomize_result(token):
+@application.route("/randomize/<token>/status", methods=["GET"])
+def randomize_status(token):
     task = tasks.get_task_result(token)
     if task["status"] in ("errored",):
         return jsonify({"error": str(task["exc"])})
 
-    if task["status"] in ("finished",):
-        return send_file(BytesIO(task["result"]), mimetype="image/png")
-
     return jsonify({"status": task["status"]})
 
+
+@application.route("/randomize/<token>/result", methods=["GET"])
+def randomize_result(token):
+    task = tasks.get_task_result(token)
+    if task["status"] not in ("finished",):
+        return jsonify({"message": "not found"}), 404
+
+    return send_file(BytesIO(task["result"]), mimetype="image/png")

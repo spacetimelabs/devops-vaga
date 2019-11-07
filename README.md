@@ -29,7 +29,6 @@ por receber as tarefas, processa-lás e devolver o resultado.
         └── tasks.py
 ```
 
-
 Visão geral da aplicaçãozinha:
 
 ```
@@ -48,8 +47,38 @@ em uma lista do Redis, as processa, e retorna o resultado (ou o erro).
 
 ## Exemplo de Funcionamento
 
-TODO: colocar uns comandinhos cURL aqui, junto com os logs do container e
-a saída esperada.
+Você pode iteragir com a API usando o cURL (ou com qualquer outro
+programa que gostar).
+
+Para enviar uma imagem para processamento:
+
+Arquivo ./cat.png
+
+![Gato](./cat.png)
+
+Fonte: https://www.pexels.com/photo/orange-tabby-cat-near-window-2071873/
+
+```shell
+$ curl -H 'Content-Type: image/png' \
+    --data-binary @./cat.png \
+    http://localhost:5000/randomize
+{"token":"b27f6016f9cf46a6baaddf09d2e5b221"}
+```
+
+Para consultar o status de um processamento:
+
+```shell
+$ curl http://localhost:5000/randomize/<token>/status
+{"status":"requested"}
+```
+
+Para pegar o resultado de uma tarefa:
+
+```shell
+$ curl http://localhost:5000/randomize/<token>/result > ./out.png
+```
+
+![Gato Aleatório](./out.png)
 
 ## Mão na Massa!
 
@@ -57,13 +86,13 @@ Faça um _fork_ do projeto para seu GitHub antes de começar. Se tiver
 qualquer tipo de dúvida sobre as atividades é só mandar uma mensagem pra
 gente.
 
-Sua *primeira missão* é melhorar o ambiente de desenvolvimento! Adicione
+Sua _primeira missão_ é melhorar o ambiente de desenvolvimento! Adicione
 Dockerfile's nos componentes API HTTP e _worker_ e um docker-compose.yml
 para subir o REDIS e os componentes de forma coordenada, rodando
 tudo dentro do Docker.
 
-Nós presamos muito por uma pipeline de CI/CD funcionando. Sua *segunda
-tarefa* é criar um travis-ci.yaml que execute os testes da aplicação.
+Nós presamos muito por uma pipeline de CI/CD funcionando. Sua _segunda
+tarefa_ é criar um travis-ci.yaml que execute os testes da aplicação.
 
 O desenvolvedor esqueceu de colocar algumas métricas importantes no
 código. Altere a aplicação para registrar o tempo de execução da tarefa
@@ -81,8 +110,7 @@ em conta que vários clientes vão usar o sistema ao mesmo tempo e que,
 idealmente, o processamento feito por um cliente não deve interferir (muito)
 no tempo de processamento do outro cliente.
 
-
 ### Links Úteis
 
-* [Docker Compose](https://docs.docker.com/compose/)
-* [Travis CI](https://travis-ci.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Travis CI](https://travis-ci.com/)
