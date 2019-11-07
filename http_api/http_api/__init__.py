@@ -11,7 +11,7 @@ def randomize():
         return jsonify({"error": "Ooops! Só sei lidar com imagens PNG!"}), 400
 
     token = tasks.enqueue_randomize_image_task(request.get_data())
-    return jsonify({"token": token})
+    return jsonify({"token": token}), 201
 
 
 @application.route("/randomize/<token>/status", methods=["GET"])

@@ -1,0 +1,90 @@
+openapi: 3.0.2
+
+info:
+  version: 0.0.1
+  title: Devops Vaga
+  description: Aplicação Python c/ tarefas via Redis para _randomizar_ imagens de gatinhos.
+
+  contact:
+    name: Spacetime Labs
+    email: ec@spacetimelabs.ai
+    url: https://github.com/spacetimelabs/devops-vaga
+
+paths:
+  /randomize:
+    post:
+      summary: Aleatoriza uma imagem PNG
+      tags: [Imagens]
+      requestBody:
+        description: Imagem PNG
+        required: true
+        content:
+          "image/png":
+            schema:
+              type: string
+              format: binary
+
+      responses:
+        "201":
+          description: "Token da Tarefa"
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [token]
+                properties:
+                  token:
+                    type: string
+                    example: "b27f6016f9cf46a6baaddf09d2e5b221"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Ooops! Só sei lidar com imagens PNG!"
+  /randomize/{token}/status:
+    parameters:
+      - name: token
+        in: path
+        description: Token da tarefa
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Status de uma tarefa
+      tags: [Imagens]
+      responses:
+        "200":
+          description: "Status da tarefa"
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:
+                    type: string
+                    example: "requested"
+  /randomize/{token}/result:
+    parameters:
+      - name: token
+        in: path
+        description: Token da tarefa
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Resultado de uma tarefa
+      tags: [Imagens]
+      responses:
+        "200":
+          description: "Imagem aleatorizada"
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
